@@ -1,7 +1,8 @@
-{
-  "task": "swinir_sr_lightweight_x2"     //  classical image sr for x2/x3/x4. root/task/images-models-options
+{ 
+  "cache_path":"./" // clearml cache location
+  , "task": "SwinIR 5m to 2.5m ClearML dataset"     //  classical image sr for x2/x3/x4. root/task/images-models-options #swinir_sr_lightweight_x2_Optical_10m_to_2.5m
   , "model": "plain" // "plain" | "plain2" if two inputs
-  , "gpu_ids": [0,1,2,3,4,5,6,7]
+  , "gpu_ids": [0,1,2]
   , "dist": true
 
   , "scale": 2       // 2 | 3 | 4
@@ -17,20 +18,20 @@
     "train": {
       "name": "train_dataset"           // just name
       , "dataset_type": "sr"         // "dncnn" | "dnpatch" | "fdncnn" | "ffdnet" | "sr" | "srmd" | "dpsr" | "plain" | "plainpatch" | "jpeg"
-      , "dataroot_H": "trainsets/trainH"// path of H training dataset. DIV2K (800 training images)
-      , "dataroot_L": "trainsets/trainL"              // path of L training dataset
+      , "dataroot_H": "/train/2.5m/"// path of H training dataset. DIV2K (800 training images)
+      , "dataroot_L": "/train/5m/"              // path of L training dataset
 
-      , "H_size": 128                   // 128/192/256/512.
+      , "H_size": 256                   // 128/192/256/512.
 
       , "dataloader_shuffle": true
-      , "dataloader_num_workers": 16
-      , "dataloader_batch_size": 64      // Total batch size =8x8=64 in SwinIR
+      , "dataloader_num_workers": 4 //16
+      , "dataloader_batch_size": 8      // Total batch size =8x8=64 in SwinIR 64
     }
     , "test": {
       "name": "test_dataset"            // just name
       , "dataset_type": "sr"         // "dncnn" | "dnpatch" | "fdncnn" | "ffdnet" | "sr" | "srmd" | "dpsr" | "plain" | "plainpatch" | "jpeg"
-      , "dataroot_H": "testsets/Set5/HR"  // path of H testing dataset
-      , "dataroot_L": "testsets/Set5/LR_bicubic/X2"              // path of L testing dataset
+      , "dataroot_H": "/val/2.5m/"  // path of H testing dataset
+      , "dataroot_L": "/val/5m/"              // path of L testing dataset
 
     }
   }
@@ -39,7 +40,7 @@
     "net_type": "swinir" 
     , "upscale": 2                      // 2 | 3  | 4
     , "in_chans": 3 
-    , "img_size": 64
+    , "img_size": 128
     , "window_size": 8  
     , "img_range": 1.0 
     , "depths": [6, 6, 6, 6]
@@ -77,5 +78,7 @@
     , "checkpoint_test": 5000           // for testing
     , "checkpoint_save": 5000           // for saving model
     , "checkpoint_print": 200           // for print
+    , "number of epochs": 10        // number of epochs
+
   }
 }
